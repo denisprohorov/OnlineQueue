@@ -13,7 +13,7 @@ namespace test.Controllers
         public QueueController()
         {
             _queueService = new QueueService();
-            _db = new ApplicationContextt();
+            _db = new ApplicationContext();
             
         }
         public IActionResult Index()
