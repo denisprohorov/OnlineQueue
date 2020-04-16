@@ -1,14 +1,13 @@
-﻿using test.Database;
+using test.Database;
 
 namespace test.Services
 {
     public class QueueService:QueueModelService
     {
-        private readonly ApplicationContextt _applicationContextt;
-        public static int IdStatic;
+        private readonly ApplicationContext _applicationContext;
         public QueueService()
         {
-            _applicationContextt = new ApplicationContextt();
+            _applicationContext = new ApplicationContext();
         }
         public QueueService(QueueDbModel Queue)
         {
