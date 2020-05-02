@@ -1,0 +1,37 @@
+﻿@using test.Database
+@model UserDbModel
+
+<h3>This is a @Model.UserName's pofile</h3>
+
+<div class="info">
+    <div>
+        <p>Queues as a member:</p>
+        <div class="ListQ">
+            @foreach (int Id in Model.QueuesAsMember)
+            {
+                ApplicationContext db = ViewBag.Db;
+                <p>@db.Queues.Find(Id).Id</p>;
+            }
+        </div>
+    </div>
+    <div>
+        <p>Queues as a Teacher:</p>
+        <div class="ListQ">
+            @foreach (int Id in Model.QueuesAsTeacher)
+            {
+                ApplicationContext db = ViewBag.Db;
+                <p>@db.Queues.Find(Id).Id</p>;
+            }
+        </div>
+    </div>
+    <div>
+        <p>Queues as a Outhor:</p>
+        <div class="ListQ">
+            @foreach (int Id in Model.QueuesAsOuthor)
+            {
+                ApplicationContext db = ViewBag.Db;
+                <p>@db.Queues.Find(Id).Id</p>;
+            }
+        </div>
+    </div>
+</div>

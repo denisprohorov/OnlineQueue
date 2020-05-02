@@ -1,34 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using test.Database;
 using test.Models;
-using test.Services;
+using test.ViewModels;
 
 namespace test.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        
+        private readonly ApplicationContext _db;
+        public HomeController(ApplicationContext db)
         {
-            _logger = logger;
+            _db = db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(SearchModel Model = null)
         {
-            return View();
+            if (Model.Type != null)
+            {
+                if(Model.Type == "User")
+                {
+                    if(Model.Search != null)
+                    {
+                        ViewBag.Users = _db.Users.Where(U => U.UserName.ToLower().Contains(Model.Search.ToLower())).ToList();
+                    }else
+                    {
+                        ViewBag.Users = _db.Users.ToList();
+                    }
+
+                }else if(Model.Type == "Queue")
+                {
+                    if (Model.Search != null)
+                    {
+                        ViewBag.Queues = _db.Queues.Where(Q => Q.Name.ToLower().Contains(Model.Search.ToLower())).ToList();
+                    }
+                    else
+                    {
+                        ViewBag.Queues = _db.Queues.ToList();
+                    }
+                }
+            }else{
+                Model.Type = "Queue";
+                ViewBag.Queues = _db.Queues.ToList();
+            }
+            return View(Model);
         }
 
-        public IActionResult Privacy()
-        {
-            
-            return View();
-        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

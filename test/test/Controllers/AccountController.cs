@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using test.ViewModels;
 using test.Database;
+using System.Collections.Generic;
 
 namespace CustomIdentityApp.Controllers
 {
@@ -10,11 +11,12 @@ namespace CustomIdentityApp.Controllers
     {
         private readonly UserManager<UserDbModel> _userManager;
         private readonly SignInManager<UserDbModel> _signInManager;
-
-        public AccountController(UserManager<UserDbModel> userManager, SignInManager<UserDbModel> signInManager)
+        private readonly ApplicationContext _db;
+        public AccountController(UserManager<UserDbModel> userManager, SignInManager<UserDbModel> signInManager, ApplicationContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _db = db;
         }
         [HttpGet]
         public IActionResult Register()
@@ -26,7 +28,12 @@ namespace CustomIdentityApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserDbModel user = new UserDbModel { UserName = model.Name};
+                UserDbModel user = new UserDbModel { 
+                    UserName = model.Name ,
+                    QueuesAsMember = new List<int>(),
+                    QueuesAsOuthor = new List<int>(),
+                    QueuesAsTeacher = new List<int>(),
+                };
                 // добавляем пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -61,15 +68,7 @@ namespace CustomIdentityApp.Controllers
                     await _signInManager.PasswordSignInAsync(model.Name, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    // проверяем, принадлежит ли URL приложению
-                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -86,6 +85,13 @@ namespace CustomIdentityApp.Controllers
             // удаляем аутентификационные куки
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult UserPage(string Name)
+        {
+            ViewBag.Db = _db;
+            UserDbModel user = _userManager.FindByNameAsync(Name).Result;
+            return View(user);
         }
     }
 }

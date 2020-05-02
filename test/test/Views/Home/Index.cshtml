@@ -1,5 +1,66 @@
-﻿@{
+﻿@model test.ViewModels.SearchModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
+<form method="post" asp-controller="Home" asp-action="Index">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="Type"></label>
+        <select id="What type" asp-for="Type">
+            <option value="User">User</option>
+            <option value="Queue">Queue</option>
+        </select>
 
+        <input asp-for="Search"/>
+    </div>
+    <div>
+        <input type="submit" value="test" />
+    </div>
+</form>
+
+<div>
+    @if (ViewBag.Queues != null)
+    {
+        <table>
+            <tr><th>Name</th><th>Type</th><th>Number of members</th></tr>
+            @foreach (var Q in ViewBag.Queues)
+            {
+                <tr>
+                    <td><a href="/Queue/QView?Id=@Q.Id">@Q.Name</a></td>
+                    <td>@Q.Priority</td>
+                    <td>@Q.UsersName.Count</td>
+                </tr>
+            }
+        </table>
+    }
+    else if (ViewBag.Users != null)
+    {
+        <table>
+            <tr><th>Name</th></tr>
+            @foreach (var U in ViewBag.Users)
+            {
+                <tr>
+                    <td><a href="/Account/UserPage?Name=@U.UserName">@U.UserName</a></td>
+                </tr>
+            }
+        </table>
+    }
+</div>
+
+<script>
+    document.getElementById("What type").addEventListener('change', function () {
+        let inf = document.getElementById("What type");
+        value = inf.options[inf.selectedIndex].value;
+        if (value == "User") {
+
+        } else if (value == "Queue") {
+
+        }
+
+
+
+    })
+
+
+</script>

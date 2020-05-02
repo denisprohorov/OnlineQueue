@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] test</title>
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -13,41 +14,41 @@
             <table class="nav-table">
                 <tr>
                     <td>
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">test</a>
+                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">test</a>
                     </td>
                     <td>
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </td>
                     <td>
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                     </td>
                     <td>
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Queue" asp-action="Index">Queue</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Queue" asp-action="CreateQ">Queue</a>
                     </td>
                 </tr>
             </table>
             <table class="regTable">
                 <tr>
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <td>
-                    @User.Identity.Name
-                    </td>
-                    <td>
-                    <form method="post" asp-controller="Account" asp-action="Logout">
-                        <input type="submit" value="Выход" />
-                    </form>
-                    </td>
-                }
-                else
-                {
-                    <td>
-                    <a asp-controller="Account" asp-action="Login">Вход</a>
-                    </td>
-                    <td>
-                        <a asp-controller="Account" asp-action="Register">Регистрация</a>
-                    </td>
-                }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <td>
+                            <a asp-controller="Account" asp-action="UserPage" asp-route-Name="@User.Identity.Name">@User.Identity.Name</a>
+                        </td>
+                        <td>
+                            <form method="post" asp-controller="Account" asp-action="Logout">
+                                <input type="submit" value="Выход" />
+                            </form>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            <a asp-controller="Account" asp-action="Login">Вход</a>
+                        </td>
+                        <td>
+                            <a asp-controller="Account" asp-action="Register">Регистрация</a>
+                        </td>
+                    }
                 </tr>
             </table>
         </div>

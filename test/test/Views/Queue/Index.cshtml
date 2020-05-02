@@ -1,7 +1,19 @@
-﻿
-@{
-    ViewData["Title"] = "Index";
-}
+﻿@using test.Database
+@model test.Database.ApplicationContext
 
-<h1>Queue, hi</h1>
+@{
+        QueueDbModel Queue = Model.Queues.Find((int)ViewData["Id"]);
+        string content = "";
+        content += "<ul>";
+        content += "<li>Teacher - " + Queue.TeacherName + "</li>" +
+            "<li>Outhor - " + Queue.OuthorName + "</li>";
+
+        foreach (string Name in Queue.UsersName)
+        {
+            content += "<li>" + Name + "</li>";
+        }
+        content += "</ul>";
+}
+@content
+
 

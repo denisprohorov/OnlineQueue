@@ -1,7 +1,27 @@
+﻿@using test.Database
+@model test.Database.QueueDbModel
 @{
     ViewData["Title"] = "QView";
 }
 
-<h1>QView</h1>
-<h2>model</h2>
 
+<p>Queue - @Model.Name</p>
+<p>Short discription : @Model.About</p>
+<p>Model - @Model.Priority</p>
+
+<div id="Queue">
+</div>
+
+<button onclick="ViewQueue()">hub</button>
+
+
+<script>
+function ViewQueue() {
+$.ajax({
+        url: '/Queue/Index?Id=@Model.Id',
+    success: function (data) {
+        document.getElementById("Queue").innerHTML = data;
+    }
+});
+}
+</script>

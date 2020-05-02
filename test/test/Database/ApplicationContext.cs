@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace test.Database
@@ -10,22 +10,6 @@ namespace test.Database
             : base(options)
         {
             Database.EnsureCreated();
-        }
-        public ApplicationContext()
-        {
-            Database.EnsureCreated();
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=userdb;Username=postgres;Password=123");
-        }
-        public QueueDbModel FindQueueById(int Id)
-        {
-            foreach (var i in Queues)
-            {
-                if (i.Id == Id) return i;
-            }
-            return null;
         }
     }
 }
