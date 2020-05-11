@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
+using SignalRApp;
 
 namespace test
 {
@@ -34,13 +36,17 @@ namespace test
                 .AddEntityFrameworkStores<ApplicationContext>();
 
             services.AddControllersWithViews();
+
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDeveloperExceptionPage();
 
+
             app.UseHttpsRedirection();
+            // app.UseDefaultFiles();
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -52,7 +58,10 @@ namespace test
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapHub<ChatHub>("/ChatTest");
             });
+
         }
     }
 }

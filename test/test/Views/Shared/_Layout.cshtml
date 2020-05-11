@@ -1,4 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity;
+@using System.Web;
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,13 +22,14 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </td>
                     <td>
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Queue" asp-action="CreateQ">Queue</a>
                     </td>
                     <td>
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Queue" asp-action="CreateQ">Queue</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Chat" asp-action="Index">Chat</a>
                     </td>
                 </tr>
             </table>
+
             <table class="regTable">
                 <tr>
                     @if (User.Identity.IsAuthenticated)

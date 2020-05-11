@@ -3,16 +3,16 @@
         <h3>Вход в приложение</h3>
         <form method="post" asp-controller="Account" asp-action="Login"
               asp-route-returnUrl="@Model.ReturnUrl">
-            <div asp-validation-summary="ModelOnly"></div>
+            <div class="invalid" asp-validation-summary="ModelOnly"></div>
             <div>
                 <label asp-for="Name"></label><br />
                 <input asp-for="Name" />
-                <span asp-validation-for="Name"></span>
+                <span class="invalid" asp-validation-for="Name"></span>
             </div>
             <div>
                 <label asp-for="Password"></label><br />
                 <input asp-for="Password" />
-                <span asp-validation-for="Password"></span>
+                <span class="invalid" asp-validation-for="Password"></span>
             </div>
             <div>
                 <label asp-for="RememberMe"></label><br />

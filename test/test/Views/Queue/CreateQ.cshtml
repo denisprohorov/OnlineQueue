@@ -1,41 +1,44 @@
 ﻿@model test.ViewModels.CreateQViewModel
+@{
+    ViewData["Title"] = "CreateQ";
+}
 
 @if (User.Identity.IsAuthenticated)
 {
-<h2>создание новой очереди</h2>
-<form method="post" asp-controller="Queue" asp-action="CreateQ">
-    <div asp-validation-summary="ModelOnly"></div>
-    <div>
-        <label asp-for="Name"></label><br />
-        <input asp-for="Name" />
-        <span asp-validation-for="Name"></span>
-    </div>
-    <div>
-        <label asp-for="About"></label><br />
-        <input asp-for="About" />
-    </div>
-    <div>
-        <label asp-for="Priority"></label><br />
-        <select asp-for="Priority">
-            <option value="none" selected="selected">none</option>
-            <option value="less">less</option>
-            <option value="greater">greater</option>
-        </select>
-    </div>
-    <div>
-        <label asp-for="Id"></label><br />
-        <input asp-for="Id" />
-        <span asp-validation-for="Id"></span>
-    </div>
-    <div>
-        <label asp-for="TeacherName"></label><br />
-        <input asp-for="TeacherName" />
-        <span asp-validation-for="TeacherName"></span>
-    </div>
-    <div>
-        <input type="submit" value="Готово" />
-    </div>
-</form>
+    <h2>создание новой очереди</h2>
+    <form method="post" asp-controller="Queue" asp-action="CreateQ">
+        <div asp-validation-summary="ModelOnly"></div>
+        <div>
+            <label asp-for="Name"></label><br />
+            <input asp-for="Name" />
+            <span class="invalid" asp-validation-for="Name"></span>
+        </div>
+        <div>
+            <label asp-for="About"></label><br />
+            <input asp-for="About" />
+        </div>
+        <div>
+            <label asp-for="Priority"></label><br />
+            <select asp-for="Priority">
+                <option value="none" selected="selected">none</option>
+                <option value="less">less</option>
+                <option value="greater">greater</option>
+            </select>
+        </div>
+        <div>
+            <label asp-for="Id"></label><br />
+            <input asp-for="Id" />
+            <span class="invalid" asp-validation-for="Id"></span>
+        </div>
+        <div>
+            <label asp-for="TeacherName"></label><br />
+            <input asp-for="TeacherName" />
+            <span class="invalid" asp-validation-for="TeacherName"></span>
+        </div>
+        <div>
+            <input type="submit" value="Готово" />
+        </div>
+    </form>
 }
 else
 {
