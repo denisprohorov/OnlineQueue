@@ -24,11 +24,39 @@ a {
   border-color: #1861ac;
 }
 
-/* other styles 
+/* my styles 
 ---------------------------------------------------*/
 .invalid {
     color: #ff0000;
 }
+
+.chat-main-block{
+    padding-left: 200px;
+    padding-right: 200px;
+    text-align: center;
+}
+
+.message {
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 10px 0;
+    text-align: left;
+    word-wrap: break-word;
+}
+
+.message p{
+    margin: 0;
+    padding: 0;
+}
+
+.message-time{
+    float: right;
+    font-size: 12px;
+    color: #9d5c00;
+}
+
 
 /* Sticky footer styles
 -------------------------------------------------- */

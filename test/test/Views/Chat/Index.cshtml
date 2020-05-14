@@ -6,17 +6,18 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <h4>Write your message, @User.Identity.Name</h4>
-    <div id="header"></div>
-    <br />
+    <div class="chat-main-block">
+        <h4>Write your message, @User.Identity.Name</h4>
+        <div id="header"></div>
+        <br />
 
-    <div id="inputForm">
-        <input type="text" id="message" />
-        <input type="button" id="sendBtn" value="Отправить" />
-    </div>
-    <div id="chatroom"></div>
-    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
-    <script>
+        <div id="inputForm">
+            <input type="text" id="message" />
+            <input type="button" id="sendBtn" value="Отправить" />
+        </div>
+        <div id="chatroom"></div>
+        <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+        <script>
         const hubConnection = new signalR.HubConnectionBuilder()
             .withUrl("/ChatTest")
             .build();
@@ -25,15 +26,28 @@
 
         hubConnection.on('Send', function (message, userName) {
 
+
+            let time = new Date();
+            let timeElem = document.createElement("span");
+            console.log(time);
+            timeElem.innerHTML = time.getHours() + ':' + (time.getMinutes() < 10 ? '0' : '') + time.getMinutes();
+            timeElem.className = "message-time";
+
             let userNameElem = document.createElement("b");
             userNameElem.appendChild(document.createTextNode(userName + ': '));
 
             let elem = document.createElement("p");
             elem.appendChild(userNameElem);
+            elem.appendChild(timeElem);
+            elem.innerHTML += "<br>";
             elem.appendChild(document.createTextNode(message));
 
+            let msgElem = document.createElement("div");
+            msgElem.appendChild(elem);
+            msgElem.className = "message";
+
             var firstElem = document.getElementById("chatroom").firstChild;
-            document.getElementById("chatroom").insertBefore(elem, firstElem);
+            document.getElementById("chatroom").insertBefore(msgElem, firstElem);
 
         });
 
@@ -43,7 +57,8 @@
         });
 
         hubConnection.start();
-    </script>
+        </script>
+    </div>
 }
 else
 {
