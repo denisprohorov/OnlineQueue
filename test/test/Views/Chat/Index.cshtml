@@ -11,10 +11,11 @@
         <div id="header"></div>
         <br />
 
-        <div id="inputForm">
+        <form id="inputForm" onsubmit="SendMessage(); return false;">
             <input type="text" id="message" />
-            <input type="button" id="sendBtn" value="Отправить" />
-        </div>
+            <input type="submit" value="Отправить" />
+        </form>
+
         <div id="chatroom"></div>
         <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
         <script>
@@ -51,10 +52,11 @@
 
         });
 
-        document.getElementById("sendBtn").addEventListener("click", function (e) {
+        function SendMessage() {
             let message = document.getElementById("message").value;
             hubConnection.invoke("Send", message, userName);
-        });
+        }
+
 
         hubConnection.start();
         </script>
