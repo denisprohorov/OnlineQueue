@@ -1,9 +1,8 @@
-﻿@using test.Database
-@model test.Database.QueueDbModel
+﻿@model test.Database.QueueDbModel
 @{
     ViewData["Title"] = "QView";
 }
-
+<body onload="SetInterval()">
 
 <p>Queue - @Model.Name</p>
 <p>Short discription : @Model.About</p>
@@ -13,15 +12,44 @@
 </div>
 
 <button onclick="ViewQueue()">hub</button>
-
+@if (User.Identity.IsAuthenticated)
+{
+    <input type ="number" id="inputPriority"/>
+    <button onclick="AddToQ()"> Join Queue</button>
+    <button onclick="DeleteFromQueue('@User.Identity.Name')"> Leave Queue</button>
+}
+</body>
 
 <script>
-function ViewQueue() {
-$.ajax({
-        url: '/Queue/Index?Id=@Model.Id',
-    success: function (data) {
-        document.getElementById("Queue").innerHTML = data;
+    function SetInterval(){
+        ViewQueue();
+        setInterval(ViewQueue, 1000);
     }
-});
-}
+
+    function ViewQueue() {
+        $.ajax({
+            url: '/Queue/Index?Id=@Model.Id',
+            success: function (data) {
+                document.getElementById("Queue").innerHTML = data;
+            }
+        });
+    }
+
+    function AddToQ() {
+        $.ajax({
+            url: '/Queue/AddToQueue?Id=@Model.Id&Priority=' + document.getElementById("inputPriority").value,
+            success: function () {
+                ViewQueue();
+            }
+        });
+    }
+
+    function DeleteFromQueue(Name) {
+        $.ajax({
+            url: '/Queue/DeleteFromQueue?Id=@Model.Id&Name=' + Name,
+            success: function () {
+                ViewQueue();
+            }
+        });
+    }
 </script>
