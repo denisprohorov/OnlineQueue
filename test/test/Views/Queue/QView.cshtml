@@ -18,17 +18,19 @@
     <button onclick="AddToQ()"> Join Queue</button>
     <button onclick="DeleteFromQueue('@User.Identity.Name')"> Leave Queue</button>
 }
+
 </body>
+
 
 <script>
     function SetInterval(){
         ViewQueue();
-        setInterval(ViewQueue, 1000);
+        setInterval(ViewQueue, 5000);
     }
 
     function ViewQueue() {
         $.ajax({
-            url: '/Queue/Index?Id=@Model.Id',
+            url: '/Queue/AjaxShowQueueInfo?Id=@Model.Id',
             success: function (data) {
                 document.getElementById("Queue").innerHTML = data;
             }
@@ -37,7 +39,7 @@
 
     function AddToQ() {
         $.ajax({
-            url: '/Queue/AddToQueue?Id=@Model.Id&Priority=' + document.getElementById("inputPriority").value,
+            url: '/Queue/AjaxAddToQueue?Id=@Model.Id&Priority=' + document.getElementById("inputPriority").value,
             success: function () {
                 ViewQueue();
             }
@@ -46,7 +48,16 @@
 
     function DeleteFromQueue(Name) {
         $.ajax({
-            url: '/Queue/DeleteFromQueue?Id=@Model.Id&Name=' + Name,
+            url: '/Queue/AjaxDeleteFromQueue?Id=@Model.Id&Name=' + Name,
+            success: function () {
+                ViewQueue();
+            }
+        });
+    }
+
+    function ChangePriority(Name, Priority) {
+        $.ajax({
+            url: '/Queue/AjaxChangePriority?Id=@Model.Id&Name=' + Name + '&Priority=' + Priority,
             success: function () {
                 ViewQueue();
             }

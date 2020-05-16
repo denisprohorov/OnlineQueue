@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using test.Database;
 using test.Models;
@@ -16,22 +17,24 @@ namespace test.Controllers
         {
             _db = db;
         }
-
         public IActionResult Index(SearchModel Model = null)
         {
+
             if (Model.Type != null)
             {
-                if(Model.Type == "User")
+                if (Model.Type == "User")
                 {
-                    if(Model.Search != null)
+                    if (Model.Search != null)
                     {
                         ViewBag.Users = _db.Users.Where(U => U.UserName.ToLower().Contains(Model.Search.ToLower())).ToList();
-                    }else
+                    }
+                    else
                     {
                         ViewBag.Users = _db.Users.ToList();
                     }
 
-                }else if(Model.Type == "Queue")
+                }
+                else if (Model.Type == "Queue")
                 {
                     if (Model.Search != null)
                     {
@@ -42,14 +45,14 @@ namespace test.Controllers
                         ViewBag.Queues = _db.Queues.ToList();
                     }
                 }
-            }else{
+            }
+            else
+            {
                 Model.Type = "Queue";
                 ViewBag.Queues = _db.Queues.ToList();
             }
             return View(Model);
         }
-
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

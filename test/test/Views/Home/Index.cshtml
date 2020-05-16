@@ -4,7 +4,6 @@
 }
 
 <form method="post" asp-controller="Home" asp-action="Index">
-    <div asp-validation-summary="ModelOnly"></div>
     <div>
         <label asp-for="Type"></label>
         <select id="What type" asp-for="Type">
@@ -13,8 +12,6 @@
         </select>
 
         <input asp-for="Search"/>
-    </div>
-    <div>
         <input type="submit" value="test" />
     </div>
 </form>
