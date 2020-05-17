@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using test.Database;
 using test.Models;
@@ -17,41 +17,36 @@ namespace test.Controllers
         {
             _db = db;
         }
-        public IActionResult Index(SearchModel Model = null)
+        public async Task<IActionResult> Index(string searchType, string searchString)
         {
-
-            if (Model.Type != null)
+            var searchModel = new SearchModel();
+            if (searchType == "Queue" || searchType == null)
             {
-                if (Model.Type == "User")
-                {
-                    if (Model.Search != null)
-                    {
-                        ViewBag.Users = _db.Users.Where(U => U.UserName.ToLower().Contains(Model.Search.ToLower())).ToList();
-                    }
-                    else
-                    {
-                        ViewBag.Users = _db.Users.ToList();
-                    }
+                var Queues = from q in _db.Queues
+                             select q;
 
-                }
-                else if (Model.Type == "Queue")
+                if (!String.IsNullOrEmpty(searchString))
                 {
-                    if (Model.Search != null)
-                    {
-                        ViewBag.Queues = _db.Queues.Where(Q => Q.Name.ToLower().Contains(Model.Search.ToLower())).ToList();
-                    }
-                    else
-                    {
-                        ViewBag.Queues = _db.Queues.ToList();
-                    }
+                    Queues = Queues.Where(q => q.Name.ToLower().Contains(searchString.ToLower()));
                 }
-            }
-            else
+
+                searchModel.Queues = Queues.ToList();
+                searchModel.Type = "Queue";
+
+                return View(searchModel);
+            }else if (searchType == "User")
             {
-                Model.Type = "Queue";
-                ViewBag.Queues = _db.Queues.ToList();
+                var Users = from u in _db.Users
+                             select u;
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    Users = Users.Where(u => u.UserName.ToLower().Contains(searchString.ToLower()));
+                }
+                searchModel.Users = Users.ToList();
+                searchModel.Type = "User";
+                return View(searchModel);
             }
-            return View(Model);
+            return RedirectToAction("Index", "Home");// View(searchModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

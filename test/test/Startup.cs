@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Hosting;
 using test.Database;
-using test.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -57,7 +56,7 @@ namespace test
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{searchString?}");
 
                 endpoints.MapHub<ChatHub>("/ChatTest");
             });
