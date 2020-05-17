@@ -4,21 +4,23 @@
     ViewData["Title"] = "Public Chat";
 }
 
+
 @if (User.Identity.IsAuthenticated)
 {
     <div class="chat-main-block">
-        <h4>Write your message, @User.Identity.Name</h4>
-        <div id="header"></div>
-        <br />
+        
+        <div id="chatroom">
+            <div class="message"><b>Wellcome to the chat, @User.Identity.Name!</b></div>
+        </div>
 
-        <form id="inputForm" onsubmit="SendMessage(); return false;">
+        <form id="inputForm" autocomplete="off" onsubmit="SendMessage(); return false;">
             <input type="text" id="message" />
             <input type="submit" value="Отправить" />
         </form>
 
-        <div id="chatroom"></div>
         <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
         <script>
+
         const hubConnection = new signalR.HubConnectionBuilder()
             .withUrl("/ChatTest")
             .build();
@@ -27,10 +29,8 @@
 
         hubConnection.on('Send', function (message, userName) {
 
-
             let time = new Date();
             let timeElem = document.createElement("span");
-            console.log(time);
             timeElem.innerHTML = time.getHours() + ':' + (time.getMinutes() < 10 ? '0' : '') + time.getMinutes();
             timeElem.className = "message-time";
 
@@ -47,14 +47,19 @@
             msgElem.appendChild(elem);
             msgElem.className = "message";
 
-            var firstElem = document.getElementById("chatroom").firstChild;
-            document.getElementById("chatroom").insertBefore(msgElem, firstElem);
+            let chatElem = document.getElementById("chatroom");
+            chatElem.appendChild(msgElem);
+            chatElem.scrollTop = chatElem.scrollHeight;
 
+            
         });
 
         function SendMessage() {
             let message = document.getElementById("message").value;
-            hubConnection.invoke("Send", message, userName);
+            if (/\S/.test(message)) {
+                hubConnection.invoke("Send", message, userName);
+            }
+            document.getElementById("message").value = "";
         }
 
 
