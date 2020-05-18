@@ -1,6 +1,10 @@
 ﻿@using test.Database
 @model UserDbModel
 
+@{ 
+    ViewData["Title"] = "User " + Model.UserName;
+}
+
 <h3>This is a @Model.UserName's pofile</h3>
 
 <div class="info">

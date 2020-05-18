@@ -1,4 +1,7 @@
 ﻿@model test.ViewModels.LoginViewModel
+@{ 
+    ViewData["Title"] = "Login";
+}
     <div>
         <h3>Вход в приложение</h3>
         <form method="post" asp-controller="Account" asp-action="Login"
