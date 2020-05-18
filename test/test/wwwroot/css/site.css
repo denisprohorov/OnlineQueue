@@ -38,8 +38,25 @@ a {
     color: #ff0000;
 }
 
+pre {
+    white-space: pre-wrap;
+    margin-bottom: 0;
+}
+
 /* CHAT styles  
 -------------------------------------------------*/
+
+#inputForm input{
+    margin-top: 18px;
+    vertical-align: top;
+}
+
+#message {
+    height: 9vh;
+    width: 60%;
+    resize: none;
+}
+
 #inputForm {
     margin: 5px;
 }
@@ -73,7 +90,7 @@ a {
 }
 
 #chatroom {
-    height: 100%;
+    height: 93%;
     padding: 0 10px 0 10px;
     border: 3px solid #457f6f;
     border-radius: 10px;

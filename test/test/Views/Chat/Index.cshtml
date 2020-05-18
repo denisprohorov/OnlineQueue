@@ -14,8 +14,8 @@
             <div class="message"><b>Wellcome to the chat, @User.Identity.Name!</b></div>
         </div>
 
-        <form id="inputForm" autocomplete="off" onsubmit="SendMessage(); return false;">
-            <input type="text" id="message" />
+        <form id="inputForm" autocomplete="off" onsubmit="SendMessage(); return false;" onkeydown="return KeyDown(event)">
+            <textarea id="message"></textarea>
             <input type="submit" value="Отправить" />
         </form>
 
@@ -42,7 +42,10 @@
             elem.appendChild(userNameElem);
             elem.appendChild(timeElem);
             elem.innerHTML += "<br>";
-            elem.appendChild(document.createTextNode(message));
+
+            let pre = document.createElement("pre");
+            pre.appendChild(document.createTextNode(message.trim()));
+            elem.appendChild(pre);
 
             let msgElem = document.createElement("div");
             msgElem.appendChild(elem);
@@ -63,6 +66,12 @@
             document.getElementById("message").value = "";
         }
 
+        function KeyDown(event) {
+            if (event.key == "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                document.getElementById("inputForm").onsubmit();
+            }
+        }
 
         hubConnection.start();
         </script>
