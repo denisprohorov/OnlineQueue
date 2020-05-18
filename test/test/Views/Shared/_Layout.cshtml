@@ -16,9 +16,6 @@
             <table class="nav-table">
                 <tr>
                     <td>
-                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">test</a>
-                    </td>
-                    <td>
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </td>
                     <td>
@@ -29,6 +26,12 @@
                     </td>
                 </tr>
             </table>
+
+            <style>
+                .nav-table tr td:nth-child(@ViewData["CurrentTab"]) {
+                    background-color: #dddddd;
+                }
+            </style>
 
             <table class="regTable">
                 <tr>
@@ -67,6 +70,7 @@
             &copy; 2020 - test - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
