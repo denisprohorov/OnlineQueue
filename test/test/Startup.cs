@@ -59,6 +59,7 @@ namespace test
                     pattern: "{controller=Home}/{action=Index}/{searchString?}");
 
                 endpoints.MapHub<ChatHub>("/ChatTest");
+                endpoints.MapHub<QueueHub>("/QueueTest");
             });
 
         }

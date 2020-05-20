@@ -1,17 +1,15 @@
-﻿@model test.Database.QueueDbModel
-
-
-<table>
+﻿<tbody>
     <tr class="QTeacher">
         <td><a href="/Account/UserPage?Name=@Model.TeacherName">@Model.TeacherName</a></td>
         @if (Model.UsersName.Count != 0)
         {
-            <td>(@Model.UsersPriority[0])@Model.UsersName[0]
-            @if(User.Identity.Name == Model.OuthorName || User.Identity.Name == Model.TeacherName)
-            {
-                <button onclick="DeleteFromQueue('@Model.UsersName[0]')">remove</button>
-                <button onclick="ChangePriority('@Model.UsersName[0]', 3)">priority</button>
-            }
+            <td>
+                (@Model.UsersPriority[0])@Model.UsersName[0]
+                @if (User.Identity.Name == Model.OuthorName || User.Identity.Name == Model.TeacherName)
+                {
+                    <button onclick="DeleteFromQueue('@Model.UsersName[0]')">remove</button>
+                    <button onclick="ChangePriority('@Model.UsersName[0]')">priority</button>
+                }
             </td>
         }
     </tr>
@@ -19,13 +17,14 @@
     {
         <tr class="QMember@i">
             <td>@Model.UsersPriority[i]</td>
-            <td>@Model.UsersName[i]
-            @if(User.Identity.Name == Model.OuthorName || User.Identity.Name == Model.TeacherName)
+            <td>
+                @Model.UsersName[i]
+            @if (User.Identity.Name == Model.OuthorName || User.Identity.Name == Model.TeacherName)
             {
                 <button onclick="DeleteFromQueue('@Model.UsersName[i]')">remove</button>
-                <button onclick="ChangePriority('@Model.UsersName[i]', 3)">priority</button>
+                <button onclick="ChangePriority('@Model.UsersName[i]')">priority</button>
             }
-            </td>
-        </tr>
-    }
-</table>
+        </td>
+    </tr>
+}
+</tbody>

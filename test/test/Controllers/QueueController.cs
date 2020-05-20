@@ -63,7 +63,7 @@ namespace test.Controllers
             }
             return RedirectToAction("Index","Home");
         }
-        public void AjaxAddToQueue(int Id, int Priority)
+        public bool AjaxAddToQueue(int Id, int Priority)
         {
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
@@ -86,11 +86,12 @@ namespace test.Controllers
                     Queue.UsersPriority[i + 1] = Priority;
                     _userManager.FindByNameAsync(User.Identity.Name).Result.QueuesAsMember.Add(Id);
                     _db.SaveChanges();
+                    return true;
                 }
             }
-            return;
+            return false;
         }
-        public void AjaxDeleteFromQueue(int Id, string Name)
+        public bool AjaxDeleteFromQueue(int Id, string Name)
         {
             QueueDbModel Queue = _db.Queues.Find(Id);
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest" && Queue.UsersName.Contains(Name))
@@ -99,18 +100,22 @@ namespace test.Controllers
                 Queue.UsersPriority.RemoveAt(Queue.UsersName.FindIndex(U => U == Name));
                 Queue.UsersName.Remove(Name);
                 _db.SaveChanges();
+                return true;
             }
-            return;
+            return false;
         }
-        public void AjaxChangePriority(int Id, string Name, int Priority)
+        public bool AjaxChangePriority(int Id, string Name, int Priority)
         {
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 QueueDbModel Queue = _db.Queues.Find(Id);
                 int index = Queue.UsersName.FindIndex(U => U == Name);
+                if(Queue.UsersPriority[index] == Priority) { return false; }
                 Queue.UsersPriority[index] = Priority;
                 _db.SaveChanges();
+                return true;
             }
+            return false;
         }
         private bool IsLess(int a, int b){return (a <= b);}
         private bool IsGreater(int a, int b) { return (a >= b); }

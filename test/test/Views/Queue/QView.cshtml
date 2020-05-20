@@ -2,46 +2,53 @@
 @{
     ViewData["Title"] = "QView";
 }
-<body onload="SetInterval()">
 
-<p>Queue - @Model.Name</p>
-<p>Short discription : @Model.About</p>
-<p>Model - @Model.Priority</p>
+    <p>Queue - @Model.Name</p>
+    <p>Short discription : @Model.About</p>
+    <p>Model - @Model.Priority</p>
 
-<div id="Queue">
-</div>
+    <table id="Queue"></table>
 
-<button onclick="ViewQueue()">hub</button>
-@if (User.Identity.IsAuthenticated)
-{
-    <input type ="number" id="inputPriority"/>
-    <button onclick="AddToQ()"> Join Queue</button>
-    <button onclick="DeleteFromQueue('@User.Identity.Name')"> Leave Queue</button>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <input type="number" id="inputPriority" />
+        <button onclick="AddToQ()"> Join Queue</button>
+        <button onclick="DeleteFromQueue('@User.Identity.Name')"> Leave Queue</button>
+    }
+@{ 
+
 }
 
-</body>
-
-
+<script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
 <script>
-    function SetInterval(){
+    "use strict";
+
+    const connection = new signalR.HubConnectionBuilder().withUrl("/QueueTest").build();
+
+    connection.on("GetNotify", function () {
         ViewQueue();
-        setInterval(ViewQueue, 5000);
-    }
+    });
+
+    connection.start().then(function () {
+        connection.invoke("AddToGroup", "@Model.Id");
+        ViewQueue();
+    })
+
 
     function ViewQueue() {
         $.ajax({
             url: '/Queue/AjaxShowQueueInfo?Id=@Model.Id',
             success: function (data) {
-                document.getElementById("Queue").innerHTML = data;
-            }
+                    document.getElementById("Queue").innerHTML = data;
+                }
         });
     }
 
     function AddToQ() {
         $.ajax({
             url: '/Queue/AjaxAddToQueue?Id=@Model.Id&Priority=' + document.getElementById("inputPriority").value,
-            success: function () {
-                ViewQueue();
+            success: function (returnData) {
+                if (returnData) { connection.invoke("SendGroupNotify", "@Model.Id") } ;
             }
         });
     }
@@ -49,18 +56,23 @@
     function DeleteFromQueue(Name) {
         $.ajax({
             url: '/Queue/AjaxDeleteFromQueue?Id=@Model.Id&Name=' + Name,
-            success: function () {
-                ViewQueue();
+            success: function (returnData) {
+                if (returnData) { connection.invoke("SendGroupNotify", "@Model.Id") } ;
             }
         });
     }
 
-    function ChangePriority(Name, Priority) {
+    function ChangePriority(Name) {
         $.ajax({
-            url: '/Queue/AjaxChangePriority?Id=@Model.Id&Name=' + Name + '&Priority=' + Priority,
-            success: function () {
-                ViewQueue();
+            url: '/Queue/AjaxChangePriority?Id=@Model.Id&Name=' + Name + '&Priority=' + prompt ("inter priority", 0),
+            success: function (returnData) {
+                if (returnData) { connection.invoke("SendGroupNotify", "@Model.Id") } ;
             }
         });
     }
 </script>
+
+
+
+
+
