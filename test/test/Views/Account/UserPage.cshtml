@@ -14,7 +14,7 @@
             @foreach (int Id in Model.QueuesAsMember)
             {
                 ApplicationContext db = ViewBag.Db;
-                <p>@db.Queues.Find(Id).Id</p>;
+                <p><a asp-controller="Queue" asp-action="QView" asp-route-Id="@db.Queues.Find(Id).Id">@db.Queues.Find(Id).Name</a></p>;
             }
         </div>
     </div>
@@ -24,7 +24,7 @@
             @foreach (int Id in Model.QueuesAsTeacher)
             {
                 ApplicationContext db = ViewBag.Db;
-                <p>@db.Queues.Find(Id).Id</p>;
+                <p><a asp-controller="Queue" asp-action="QView" asp-route-Id="@db.Queues.Find(Id).Id">@db.Queues.Find(Id).Name</a></p>;
             }
         </div>
     </div>
@@ -34,7 +34,7 @@
             @foreach (int Id in Model.QueuesAsOuthor)
             {
                 ApplicationContext db = ViewBag.Db;
-                <p>@db.Queues.Find(Id).Id</p>;
+                <p><a asp-controller="Queue" asp-action="QView" asp-route-Id="@db.Queues.Find(Id).Id">@db.Queues.Find(Id).Name</a></p>;
             }
         </div>
     </div>
