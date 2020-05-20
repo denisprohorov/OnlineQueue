@@ -6,11 +6,11 @@
 
 <form asp-controller="Home" asp-action="Index" method="get">
     <p>
-        <select asp-for="Type" name="searchType">
+        <select asp-for="Type" name="Type">
             <option value="Queue">Queue</option>
             <option value="User">User</option>
         </select>
-        Title: <input type="text" name="searchString">
+        Title: <input type="text" name="Search">
         <input type="submit" value="Filter" />
     </p>
 </form>
