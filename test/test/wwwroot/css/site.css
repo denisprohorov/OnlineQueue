@@ -7,6 +7,10 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+.navDiv {
+     /*background-color: rgba(146, 191, 175, 0.5);*/ 
+}
+
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
@@ -30,6 +34,14 @@ a {
     margin-top: 10px;
 }
 
+.register,
+.login,
+.createQ { 
+    width: 30vw;
+    border: 1px solid #bbbbbb;
+    border-radius: 5px;
+}
+
 .nav-table a:hover {
     background-color: #bbbbbb;
 }
@@ -47,8 +59,8 @@ pre {
 -------------------------------------------------*/
 
 #inputForm input{
-    margin-top: 18px;
     vertical-align: top;
+    height: 9vh
 }
 
 #message {
@@ -171,3 +183,4 @@ body {
     float: right;
     margin-right: 2%;
 }
+

@@ -6,42 +6,42 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <h2>создание новой очереди</h2>
-    <form method="post" asp-controller="Queue" asp-action="CreateQ">
+    <h2>Cоздание новой очереди</h2>
+    <form class="createQ p-4" method="post" asp-controller="Queue" asp-action="CreateQ">
         <div asp-validation-summary="ModelOnly"></div>
-        <div>
+        <div class="form-group">
             <label asp-for="Name"></label><br />
-            <input asp-for="Name" />
+            <input class="form-control" placeholder="Name" asp-for="Name" />
             <span class="invalid" asp-validation-for="Name"></span>
         </div>
-        <div>
+        <div class="form-group">
             <label asp-for="About"></label><br />
-            <input asp-for="About" />
+            <input class="form-control" placeholder="About" asp-for="About" />
         </div>
-        <div>
+        <div class="form-group">
             <label asp-for="Priority"></label><br />
-            <select asp-for="Priority">
+            <select class="custom-select" asp-for="Priority">
                 <option value="none" selected="selected">none</option>
                 <option value="less">less</option>
                 <option value="greater">greater</option>
             </select>
         </div>
-        <div>
+        <div class="form-group">
             <label asp-for="Id"></label><br />
-            <input asp-for="Id" />
+            <input class="form-control" placeholder="ID" asp-for="Id" />
             <span class="invalid" asp-validation-for="Id"></span>
         </div>
-        <div>
+        <div class="form-group">
             <label asp-for="TeacherName"></label><br />
-            <input asp-for="TeacherName" />
+            <input class="form-control" placeholder="TeacherName" asp-for="TeacherName" />
             <span class="invalid" asp-validation-for="TeacherName"></span>
         </div>
         <div>
-            <input type="submit" value="Готово" />
+            <input class="btn" style="background-color:#92b1af;" type="submit" value="Готово" />
         </div>
     </form>
 }
 else
 {
-    <p>Вы не вошли в систему. Пожалуйста сделайте это для того, что бы создать свою очередь</p>
+    <h6>Вы не вошли в систему. Пожалуйста сделайте это для того, что бы создать свою очередь</h6>
 }

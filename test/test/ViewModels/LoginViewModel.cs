@@ -5,7 +5,7 @@ namespace test.ViewModels
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Name")]
+        [Display(Name = "Имя")]
         public string Name { get; set; }
 
         [Required]

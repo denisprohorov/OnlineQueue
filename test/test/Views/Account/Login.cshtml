@@ -4,25 +4,25 @@
 }
     <div>
         <h3>Вход в приложение</h3>
-        <form method="post" asp-controller="Account" asp-action="Login"
+        <form class = "login p-4" method="post" asp-controller="Account" asp-action="Login"
               asp-route-returnUrl="@Model.ReturnUrl">
             <div class="invalid" asp-validation-summary="ModelOnly"></div>
-            <div>
+            <div class="form-group">
                 <label asp-for="Name"></label><br />
-                <input asp-for="Name" />
+                <input class="form-control" placeholder="Name" asp-for="Name" />
                 <span class="invalid" asp-validation-for="Name"></span>
             </div>
-            <div>
+            <div class="form-group">
                 <label asp-for="Password"></label><br />
-                <input asp-for="Password" />
+                <input class="form-control" placeholder="Password" asp-for="Password" />
                 <span class="invalid" asp-validation-for="Password"></span>
             </div>
-            <div>
-                <label asp-for="RememberMe"></label><br />
-                <input asp-for="RememberMe" />
+            <div class="form-check">
+                <input class="form-check-input" asp-for="RememberMe" />
+                <label class="form-check-label" asp-for="RememberMe"></label>
             </div>
             <div>
-                <input type="submit" value="Войти" />
+                <input class="btn" style="background-color:#92b1af;" type="submit" value="Войти" />
             </div>
         </form>
     </div>
