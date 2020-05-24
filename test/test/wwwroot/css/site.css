@@ -1,10 +1,15 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-a.navbar-brand {
+a.navbar-brand,
+.headOfPage{
   white-space: normal;
   text-align: center;
   word-break: break-all;
+}
+
+.nav-table a:hover {
+    background-color: #bbbbbb;
 }
 
 .navDiv {
@@ -30,6 +35,23 @@ a {
 
 /* my styles 
 ---------------------------------------------------*/
+.highlight {
+    color: darkcyan;
+}
+
+.info td{
+    text-align:center;
+}
+
+.info .number {
+    color: cadetblue;
+    font-size: 18px;
+}
+
+.table-sm tr{
+    border-bottom: #dee2e6 !important;
+}
+
 .container{
     margin-top: 10px;
 }
@@ -42,8 +64,8 @@ a {
     border-radius: 5px;
 }
 
-.nav-table a:hover {
-    background-color: #bbbbbb;
+.custom-select::-webkit-scrollbar {
+    width: 0;
 }
 
 .invalid {

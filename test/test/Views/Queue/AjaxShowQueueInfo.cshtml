@@ -1,6 +1,10 @@
 ﻿<tbody>
+    <tr>
+        <th>Priority</th>
+        <th>Member</th>
+    </tr>
+<!--
     <tr class="QTeacher">
-        <td><a href="/Account/UserPage?Name=@Model.TeacherName">@Model.TeacherName</a></td>
         @if (Model.UsersName.Count != 0)
         {
             <td>
@@ -13,7 +17,8 @@
             </td>
         }
     </tr>
-    @for (int i = 1; i < Model.UsersName.Count; ++i)
+-->
+    @for (int i = 0; i < Model.UsersName.Count; ++i)
     {
         <tr class="QMember@i">
             <td>@Model.UsersPriority[i]</td>

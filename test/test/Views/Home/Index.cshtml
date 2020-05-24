@@ -6,7 +6,7 @@
 
 <form asp-controller="Home" asp-action="Index" method="get">
     <p>
-        <select asp-for="Type" name="Type">
+        <select class="custom-select" size="2" style="width: 10vw;" asp-for="Type" name="Type">
             <option value="Queue">Queue</option>
             <option value="User">User</option>
         </select>
@@ -17,7 +17,7 @@
 
 @if (Model.Type == "User")
 {
-    <table class="table-sm">
+    <table class="table">
         <tr><th>Name</th></tr>
         @foreach (var U in Model.Users)
         {

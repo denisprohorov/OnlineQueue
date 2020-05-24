@@ -5,37 +5,47 @@
     ViewData["Title"] = "User " + Model.UserName;
 }
 
-<h3>This is a @Model.UserName's pofile</h3>
+<h3 class="headOfPage">This is a <span class="highlight">@Model.UserName</span>'s pofile</h3>
 
 <div class="info">
-    <div>
-        <p>Queues as a member:</p>
-        <div class="ListQ">
-            @foreach (int Id in Model.QueuesAsMember)
-            {
-                ApplicationContext db = ViewBag.Db;
-                <p><a asp-controller="Queue" asp-action="QView" asp-route-Id="@db.Queues.Find(Id).Id">@db.Queues.Find(Id).Name</a></p>;
-            }
-        </div>
-    </div>
-    <div>
-        <p>Queues as a Teacher:</p>
-        <div class="ListQ">
-            @foreach (int Id in Model.QueuesAsTeacher)
-            {
-                ApplicationContext db = ViewBag.Db;
-                <p><a asp-controller="Queue" asp-action="QView" asp-route-Id="@db.Queues.Find(Id).Id">@db.Queues.Find(Id).Name</a></p>;
-            }
-        </div>
-    </div>
-    <div>
-        <p>Queues as a Outhor:</p>
-        <div class="ListQ">
-            @foreach (int Id in Model.QueuesAsOuthor)
-            {
-                ApplicationContext db = ViewBag.Db;
-                <p><a asp-controller="Queue" asp-action="QView" asp-route-Id="@db.Queues.Find(Id).Id">@db.Queues.Find(Id).Name</a></p>;
-            }
-        </div>
-    </div>
+    <table class="table">
+        <tr>
+            <td>
+                <span class="number">@Model.QueuesAsMember.Count()</span>
+                <p>Queues as a member</p>
+                <div class="dropdown-divider"></div>
+                <div class="ListQ">
+                    @foreach (int Id in Model.QueuesAsMember)
+                    {
+                        ApplicationContext db = ViewBag.Db;
+                        <p><a asp-controller="Queue" asp-action="QView" asp-route-Id="@db.Queues.Find(Id).Id">@db.Queues.Find(Id).Name</a></p>;
+                    }
+                </div>
+            </td>
+            <td>
+                <span class="number">@Model.QueuesAsTeacher.Count()</span>
+                <p>Queues as a Teacher</p>
+                <div class="dropdown-divider"></div>
+                <div class="ListQ">
+                    @foreach (int Id in Model.QueuesAsTeacher)
+                    {
+                        ApplicationContext db = ViewBag.Db;
+                        <p><a asp-controller="Queue" asp-action="QView" asp-route-Id="@db.Queues.Find(Id).Id">@db.Queues.Find(Id).Name</a></p>;
+                    }
+                </div>
+            </td>
+            <td>
+                <span class="number">@Model.QueuesAsOuthor.Count()</span>
+                <p>Queues as a Outhor</p>
+                <div class="dropdown-divider"></div>
+                <div class="ListQ">
+                    @foreach (int Id in Model.QueuesAsOuthor)
+                    {
+                        ApplicationContext db = ViewBag.Db;
+                        <p><a asp-controller="Queue" asp-action="QView" asp-route-Id="@db.Queues.Find(Id).Id">@db.Queues.Find(Id).Name</a></p>;
+                    }
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>
