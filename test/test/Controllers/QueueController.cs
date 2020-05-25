@@ -11,7 +11,7 @@ namespace test.Controllers
     {
         private ApplicationContext _db;
         private UserManager<UserDbModel> _userManager;
-       
+
         public QueueController(ApplicationContext db, UserManager<UserDbModel> userManager)
         {
             _db = db;
@@ -57,39 +57,16 @@ namespace test.Controllers
         }
         public IActionResult AjaxShowQueueInfo(int Id)
         {
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest") { 
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
                 QueueDbModel Queue = _db.Queues.Find(Id);
                 return PartialView(Queue);
             }
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
         public bool AjaxAddToQueue(int Id, int Priority)
         {
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
-                Compare compare;
-                QueueDbModel Queue = _db.Queues.Find(Id);
-                compare = InitializateCompare(Queue.Priority);
-
-                if (User.Identity.IsAuthenticated && !Queue.UsersName.Contains(User.Identity.Name))
-                {
-                    int i = Queue.UsersPriority.Count - 1;
-                    Queue.UsersName.Add(User.Identity.Name);
-                    Queue.UsersPriority.Add(Priority);
-                    while (i >= 0 && !compare(Queue.UsersPriority[i], Priority))
-                    {
-                        Queue.UsersName[i + 1] = Queue.UsersName[i];
-                        Queue.UsersPriority[i + 1] = Queue.UsersPriority[i];
-                        --i;
-                    }
-                    Queue.UsersName[i + 1] = User.Identity.Name;
-                    Queue.UsersPriority[i + 1] = Priority;
-                    _userManager.FindByNameAsync(User.Identity.Name).Result.QueuesAsMember.Add(Id);
-                    _db.SaveChanges();
-                    return true;
-                }
-            }
-            return false;
+            return AddToQueue(Id, Priority, User.Identity.Name);
         }
         public bool AjaxDeleteFromQueue(int Id, string Name)
         {
@@ -110,16 +87,47 @@ namespace test.Controllers
             {
                 QueueDbModel Queue = _db.Queues.Find(Id);
                 int index = Queue.UsersName.FindIndex(U => U == Name);
-                if(Queue.UsersPriority[index] == Priority) { return false; }
-                Queue.UsersPriority[index] = Priority;
+                if (Queue.UsersPriority[index] == Priority) { return false; }
+                AjaxDeleteFromQueue(Id, Name);
+                AddToQueue(Id, Priority, Name);
                 _db.SaveChanges();
                 return true;
             }
             return false;
         }
-        private bool IsLess(int a, int b){return (a <= b);}
+
+        public bool AddToQueue(int Id, int Priority, string Name)
+        {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                Compare compare;
+                QueueDbModel Queue = _db.Queues.Find(Id);
+                compare = InitializateCompare(Queue.Priority);
+
+                if (User.Identity.IsAuthenticated && !Queue.UsersName.Contains(Name))
+                {
+                    int i = Queue.UsersPriority.Count - 1;
+                    Queue.UsersName.Add(Name);
+                    Queue.UsersPriority.Add(Priority);
+                    while (i >= 0 && !compare(Queue.UsersPriority[i], Priority))
+                    {
+                        Queue.UsersName[i + 1] = Queue.UsersName[i];
+                        Queue.UsersPriority[i + 1] = Queue.UsersPriority[i];
+                        --i;
+                    }
+                    Queue.UsersName[i + 1] = Name;
+                    Queue.UsersPriority[i + 1] = Priority;
+                    _userManager.FindByNameAsync(Name).Result.QueuesAsMember.Add(Id);
+                    _db.SaveChanges();
+                    return true;
+                }
+            }
+            return false;
+        }
+        private bool IsLess(int a, int b) { return (a <= b); }
         private bool IsGreater(int a, int b) { return (a >= b); }
         private bool IsNone(int a, int b) { return true; }
+
         private delegate bool Compare(int a, int b);
         private Compare InitializateCompare(string type)
         {

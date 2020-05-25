@@ -24,7 +24,7 @@
             <td>@Model.UsersPriority[i]</td>
             <td>
                 @Model.UsersName[i]
-            @if (User.Identity.Name == Model.OuthorName || User.Identity.Name == Model.TeacherName)
+           @if (User.Identity.Name == Model.OuthorName || User.Identity.Name == Model.TeacherName)
             {
                 <button onclick="DeleteFromQueue('@Model.UsersName[i]')">remove</button>
                 <button onclick="ChangePriority('@Model.UsersName[i]')">priority</button>
