@@ -66,7 +66,11 @@ namespace test.Controllers
         }
         public bool AjaxAddToQueue(int Id, int Priority)
         {
-            return AddToQueue(Id, Priority, User.Identity.Name);
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return AddToQueue(Id, Priority, User.Identity.Name);
+            }
+            return false;
         }
         public bool AjaxDeleteFromQueue(int Id, string Name)
         {
@@ -96,32 +100,30 @@ namespace test.Controllers
             return false;
         }
 
-        public bool AddToQueue(int Id, int Priority, string Name)
+        private bool AddToQueue(int Id, int Priority, string Name)
         {
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
-                Compare compare;
-                QueueDbModel Queue = _db.Queues.Find(Id);
-                compare = InitializateCompare(Queue.Priority);
+            Compare compare;
+            QueueDbModel Queue = _db.Queues.Find(Id);
+            compare = InitializateCompare(Queue.Priority);
 
-                if (User.Identity.IsAuthenticated && !Queue.UsersName.Contains(Name))
+            if (User.Identity.IsAuthenticated && !Queue.UsersName.Contains(Name))
+            {
+                int i = Queue.UsersPriority.Count - 1;
+                Queue.UsersName.Add(Name);
+                Queue.UsersPriority.Add(Priority);
+                while (i >= 0 && !compare(Queue.UsersPriority[i], Priority))
                 {
-                    int i = Queue.UsersPriority.Count - 1;
-                    Queue.UsersName.Add(Name);
-                    Queue.UsersPriority.Add(Priority);
-                    while (i >= 0 && !compare(Queue.UsersPriority[i], Priority))
-                    {
-                        Queue.UsersName[i + 1] = Queue.UsersName[i];
-                        Queue.UsersPriority[i + 1] = Queue.UsersPriority[i];
-                        --i;
-                    }
-                    Queue.UsersName[i + 1] = Name;
-                    Queue.UsersPriority[i + 1] = Priority;
-                    _userManager.FindByNameAsync(Name).Result.QueuesAsMember.Add(Id);
-                    _db.SaveChanges();
-                    return true;
+                    Queue.UsersName[i + 1] = Queue.UsersName[i];
+                    Queue.UsersPriority[i + 1] = Queue.UsersPriority[i];
+                    --i;
                 }
+                Queue.UsersName[i + 1] = Name;
+                Queue.UsersPriority[i + 1] = Priority;
+                _userManager.FindByNameAsync(Name).Result.QueuesAsMember.Add(Id);
+                _db.SaveChanges();
+                return true;
             }
+
             return false;
         }
         private bool IsLess(int a, int b) { return (a <= b); }

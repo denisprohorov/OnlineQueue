@@ -7,22 +7,19 @@
     <div class="dropdown-divider"></div>
     <h5>Short discription: <span class="highlight">@Model.About</span></h5>
     <h6>Model: <span class="highlight">@Model.Priority</span></h6>
-    <h6>Author: <a href="/Account/UserPage?Name=@Model.TeacherName">@Model.OuthorName</a></h6>
+    <h6>Author: <a href="/Account/UserPage?Name=@Model.OuthorName">@Model.OuthorName</a></h6>
     <h6>Teacher: <a href="/Account/UserPage?Name=@Model.TeacherName">@Model.TeacherName</a></h6>
 
     @if (User.Identity.IsAuthenticated)
-    {   
+    {
         <div class="form-check-inline">
             <input placeholder="Proirity" type="number" id="inputPriority" style="width: 100px;"/>
-            <button onclick="AddToQ()"> Join Q</button>
-            <button onclick="DeleteFromQueue('@User.Identity.Name')"> Leave Q</button>
-        </div>
+            <button onclick = "AddToQ()" > Join Q </button>
+            <button onclick = "DeleteFromQueue('@User.Identity.Name')" > Leave Q </button>
+       </div>
     }
 
     <table class="table" id="Queue"></table>
-@{ 
-
-}
 
 <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
 <script>
