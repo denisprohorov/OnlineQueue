@@ -14,7 +14,7 @@ namespace test.ViewModels
         [Display(Name = "About")]
         public string About { get; set; }
         [Required]
-        [Display(Name = "Id(сделать потом через static)")]
+        [Display(Name = "Id")]
         public int Id { get; set; }
         [Required]
         [Display(Name = "Teacher")]
