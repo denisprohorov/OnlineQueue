@@ -9,15 +9,14 @@ namespace test.ViewModels
         public string Name { get; set; }
         [Required]
         [Display(Name = "Priority")]
+        ///////////////////////////////////////////////////////////////
         public string Priority { get; set; }
         [Required]
-        [Display(Name = "About")]
-        public string About { get; set; }
-        [Required]
-        [Display(Name = "Id")]
-        public int Id { get; set; }
+        [Display(Name = "Title")]
+        public string Title { get; set; }
+        /////////////////////////////////////////////////////////
         [Required]
         [Display(Name = "Teacher")]
-        public string TeacherName { get; set; }
+        public string Teacher { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace test
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationContext>(options =>
+            services.AddDbContext<OnlineQueueDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("UsersDb")));
 
             services.AddIdentity<UserDbModel, IdentityRole>(opts => {
@@ -32,7 +32,7 @@ namespace test
                 opts.Password.RequireUppercase = false; // требуются ли символы в верхнем регистре
                 opts.Password.RequireDigit = false; // требуются ли цифры
             })
-                .AddEntityFrameworkStores<ApplicationContext>();
+                .AddEntityFrameworkStores<OnlineQueueDbContext>();
 
             services.AddControllersWithViews();
 

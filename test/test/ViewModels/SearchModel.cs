@@ -8,6 +8,7 @@ namespace test.ViewModels
     {
         [Required]
         [Display(Name = "Find")]
+        //////////////////////////////////////
         public string Type {get;set;}
 
         [Required]

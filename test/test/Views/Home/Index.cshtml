@@ -15,13 +15,13 @@
     </p>
 </form>
 
-@if (Model.Type == "User")
+<!--if (Model.Type == "User")
 {
     <table class="table">
         <tr><th>Name</th></tr>
-        @foreach (var U in Model.Users)
+        foreach (var U in Model.Users)
         {
-            <tr><td><a href="/Account/UserPage?Name=@U.UserName">@U.UserName</a></td></tr>
+            <tr><td><a href="/Account/UserPage?Name=U.UserName">U.UserName</a></td></tr>
         }
     </table>
 }
@@ -29,9 +29,10 @@ else if (Model.Type == "Queue")
 {
     <table class="table">
         <tr><th>Title</th><th>Priority</th><th>Number of users</th></tr>
-        @foreach (var Q in Model.Queues)
+        foreach (var Q in Model.Queues)
         {
-            <tr><td><a href="/Queue/QView?Id=@Q.Id">@Q.Name</a></td><td>@Q.Priority</td><td>@Q.UsersName.Count()</td></tr>
+            <tr><td><a href="/Queue/QView?Id=Q.Id">Q.Name</a></td><td>Q.Priority</td><td>Q.UsersName.Count()</td></tr>
         }
     </table>
 }
+-->

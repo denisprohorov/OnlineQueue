@@ -1,7 +1,8 @@
 ﻿@using test.Database
 @model UserDbModel
+<!--requered include UsersQueues, QueuesAsTeacher, QueuesAsAuthor, UserQueue.QueueDbModel  -->
 
-@{ 
+@{
     ViewData["Title"] = "User " + Model.UserName;
 }
 
@@ -11,14 +12,13 @@
     <table class="table">
         <tr>
             <td>
-                <span class="number">@Model.QueuesAsMember.Count()</span>
+                <span class="number">@Model.UsersQueues.Count()</span>
                 <p>Queues as a member</p>
                 <div class="dropdown-divider"></div>
                 <div class="ListQ">
-                    @foreach (int Id in Model.QueuesAsMember)
+                    @foreach (UserQueueDbModel UserQueue in Model.UsersQueues)
                     {
-                        ApplicationContext db = ViewBag.Db;
-                        <p><a asp-controller="Queue" asp-action="QView" asp-route-Id="@db.Queues.Find(Id).Id">@db.Queues.Find(Id).Name</a></p>;
+                        <p><a asp-controller="Queue" asp-action="QView" asp-route-Id="@UserQueue.QueueDbModelId">@UserQueue.QueueDbModel.Title</a></p>;
                     }
                 </div>
             </td>
@@ -27,22 +27,20 @@
                 <p>Queues as a Teacher</p>
                 <div class="dropdown-divider"></div>
                 <div class="ListQ">
-                    @foreach (int Id in Model.QueuesAsTeacher)
+                    @foreach (QueueDbModel Queue in Model.QueuesAsTeacher)
                     {
-                        ApplicationContext db = ViewBag.Db;
-                        <p><a asp-controller="Queue" asp-action="QView" asp-route-Id="@db.Queues.Find(Id).Id">@db.Queues.Find(Id).Name</a></p>;
+                        <p><a asp-controller="Queue" asp-action="QView" asp-route-Id="@Queue.Id">@Queue.Title</a></p>;
                     }
                 </div>
             </td>
             <td>
-                <span class="number">@Model.QueuesAsOuthor.Count()</span>
+                <span class="number">@Model.QueuesAsAuthor.Count()</span>
                 <p>Queues as a Author</p>
                 <div class="dropdown-divider"></div>
                 <div class="ListQ">
-                    @foreach (int Id in Model.QueuesAsOuthor)
+                    @foreach (QueueDbModel Queue in Model.QueuesAsAuthor)
                     {
-                        ApplicationContext db = ViewBag.Db;
-                        <p><a asp-controller="Queue" asp-action="QView" asp-route-Id="@db.Queues.Find(Id).Id">@db.Queues.Find(Id).Name</a></p>;
+                        <p><a asp-controller="Queue" asp-action="QView" asp-route-Id="@Queue.Id">@Queue.Title</a></p>;
                     }
                 </div>
             </td>

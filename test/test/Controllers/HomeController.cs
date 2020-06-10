@@ -12,38 +12,38 @@ namespace test.Controllers
     public class HomeController : Controller
     {
         
-        private readonly ApplicationContext _db;
-        public HomeController(ApplicationContext db)
+        private readonly OnlineQueueDbContext _db;
+        public HomeController(OnlineQueueDbContext db)
         {
             _db = db;
         }
-        private SearchModel FindQueues(SearchModel searchModel)
-        {
-            searchModel.Queues = _db.Queues.ToList();
+        //private SearchModel FindQueues(SearchModel searchModel)
+        //{
+        //    searchModel.Queues = _db.Queues.ToList();
 
-            if (!String.IsNullOrEmpty(searchModel.Search))
-            {
-                searchModel.Queues = searchModel.Queues.Where(q => q.Name.ToLower().Contains(searchModel.Search.ToLower())).ToList();
-            }
+        //    if (!String.IsNullOrEmpty(searchModel.Search))
+        //    {
+        //        searchModel.Queues = searchModel.Queues.Where(q => q.Name.ToLower().Contains(searchModel.Search.ToLower())).ToList();
+        //    }
 
-            searchModel.Type = "Queue";
+        //    searchModel.Type = "Queue";
 
-            return searchModel;
-        }
-        private SearchModel FindUsers(SearchModel searchModel)
-        {
-            searchModel.Users = _db.Users.ToList();
-            if (!String.IsNullOrEmpty(searchModel.Search))
-            {
-                searchModel.Users = searchModel.Users.Where(u => u.UserName.ToLower().Contains(searchModel.Search.ToLower())).ToList();
-            }
-            searchModel.Type = "User";
+        //    return searchModel;
+        //}
+        //private SearchModel FindUsers(SearchModel searchModel)
+        //{
+        //    searchModel.Users = _db.Users.ToList();
+        //    if (!String.IsNullOrEmpty(searchModel.Search))
+        //    {
+        //        searchModel.Users = searchModel.Users.Where(u => u.UserName.ToLower().Contains(searchModel.Search.ToLower())).ToList();
+        //    }
+        //    searchModel.Type = "User";
 
-            return searchModel;
-        }
+        //    return searchModel;
+        //}
         public async Task<IActionResult> Index(SearchModel searchModel = null)
         {
-            return View((searchModel.Type == "User") ? FindUsers(searchModel) : FindQueues(searchModel));
+            return View(/*(searchModel.Type == "User") ? FindUsers(searchModel) : FindQueues(searchModel)*/);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

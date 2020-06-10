@@ -11,8 +11,8 @@ namespace CustomIdentityApp.Controllers
     {
         private readonly UserManager<UserDbModel> _userManager;
         private readonly SignInManager<UserDbModel> _signInManager;
-        private readonly ApplicationContext _db;
-        public AccountController(UserManager<UserDbModel> userManager, SignInManager<UserDbModel> signInManager, ApplicationContext db)
+        private readonly OnlineQueueDbContext _db;
+        public AccountController(UserManager<UserDbModel> userManager, SignInManager<UserDbModel> signInManager, OnlineQueueDbContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -28,12 +28,10 @@ namespace CustomIdentityApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                UserDbModel user = new UserDbModel { 
-                    UserName = model.Name ,
-                    QueuesAsMember = new List<int>(),
-                    QueuesAsOuthor = new List<int>(),
-                    QueuesAsTeacher = new List<int>(),
+                UserDbModel user = new UserDbModel() { 
+                    UserName = model.Name,
                 };
+
                 // добавляем пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

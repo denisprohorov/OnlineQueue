@@ -1,35 +1,22 @@
-﻿<tbody>
+﻿<!--
+<tbody>
     <tr>
         <th>Priority</th>
         <th>Member</th>
     </tr>
-<!--
-    <tr class="QTeacher">
-        @if (Model.UsersName.Count != 0)
-        {
-            <td>
-                (@Model.UsersPriority[0])@Model.UsersName[0]
-                @if (User.Identity.Name == Model.OuthorName || User.Identity.Name == Model.TeacherName)
-                {
-                    <button onclick="DeleteFromQueue('@Model.UsersName[0]')">remove</button>
-                    <button onclick="ChangePriority('@Model.UsersName[0]')">priority</button>
-                }
-            </td>
-        }
-    </tr>
--->
-    @for (int i = 0; i < Model.UsersName.Count; ++i)
+    for (int i = 0; i < Model.UsersName.Count; ++i)
     {
-        <tr class="QMember@i">
-            <td>@Model.UsersPriority[i]</td>
+        <tr class="QMember\i">
+            <td>Model.UsersPriority[i]</td>
             <td>
-                @Model.UsersName[i]
-           @if (User.Identity.Name == Model.OuthorName || User.Identity.Name == Model.TeacherName)
+                Model.UsersName[i]
+           if (User.Identity.Name == Model.OuthorName || User.Identity.Name == Model.TeacherName)
             {
-                <button onclick="DeleteFromQueue('@Model.UsersName[i]')">remove</button>
-                <button onclick="ChangePriority('@Model.UsersName[i]')">priority</button>
+                <button onclick="DeleteFromQueue('Model.UsersName[i]')">remove</button>
+                <button onclick="ChangePriority('Model.UsersName[i]')">priority</button>
             }
         </td>
     </tr>
 }
 </tbody>
+-->

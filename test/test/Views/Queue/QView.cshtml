@@ -2,13 +2,15 @@
 @{
     ViewData["Title"] = "QView";
 }
+<!--requered include Author, Teacher, -->
 
-    <h3 class="headOfPage">Queue - <span class="highlight">@Model.Name</span></h3>
+
+    <h3 class="headOfPage">Queue - <span class="highlight">@Model.Title</span></h3>
     <div class="dropdown-divider"></div>
     <h5>Short discription: <span class="highlight">@Model.About</span></h5>
-    <h6>Model: <span class="highlight">@Model.Priority</span></h6>
-    <h6>Author: <a href="/Account/UserPage?Name=@Model.OuthorName">@Model.OuthorName</a></h6>
-    <h6>Teacher: <a href="/Account/UserPage?Name=@Model.TeacherName">@Model.TeacherName</a></h6>
+    <h6>Model: <span class="highlight">Model.</span></h6>
+    <h6>Author: <a href="/Account/UserPage?Name=@Model.Author.UserName">@Model.Author.UserName</a></h6>
+    <h6>Teacher: <a href="/Account/UserPage?Name=@Model.Teacher.UserName">@Model.Teacher.UserName</a></h6>
 
     @if (User.Identity.IsAuthenticated)
     {
