@@ -8,7 +8,7 @@ namespace test.Database
         public OnlineQueueDbContext(DbContextOptions<OnlineQueueDbContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         public virtual DbSet<QueueDbModel> Queues { get; set; }
