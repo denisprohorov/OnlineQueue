@@ -12,11 +12,12 @@
     <div class="form-group">
         <label asp-for="Title"></label><br />
         <input class="form-control" placeholder="Title" asp-for="Title" autocomplete="off" />
-        <!--<span class="invalid" asp-validation-for="Title"></span>-->
+        <span class="invalid" asp-validation-for="Title"></span>
     </div>
     <div class="form-group">
         <label asp-for="About"></label><br />
         <input class="form-control" placeholder="About" asp-for="About" autocomplete="off" />
+        <span class="invalid" asp-validation-for="About"></span>
     </div>
     <div class="form-group">
         <label asp-for="Priority"></label><br />
@@ -29,7 +30,7 @@
     <div class="form-group">
         <label asp-for="Teacher"></label><br />
         <input class="form-control" placeholder="Name" asp-for="Teacher" />
-        <!--span class="invalid" asp-validation-for="Teacher"></span>-->
+        <span class="invalid" asp-validation-for="Teacher"></span>
     </div>
     <div>
         <input class="btn" style="background-color:#92b1af;" type="submit" value="Готово" />

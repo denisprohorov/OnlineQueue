@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace test.Controllers
 {
@@ -19,15 +20,11 @@ namespace test.Controllers
             _db = db;
             _userManager = userManager;
         }
-        //public IActionResult QView(int Id)
-        //{
-        //    QueueDbModel Queue = _db.Queues.Find(Id);
-        //    if (Queue == null)
-        //    {
-        //        return RedirectToAction("index", "Home");
-        //    }
-        //    return View(Queue);
-        //}
+        public IActionResult QView(int Id)
+        {
+            QueueDbModel Queue = _db.Queues.Include("Author").FirstOrDefaultAsync(Q => Q.Id == Id).Result;
+            return View(Queue);
+        }
         [Authorize]
         [HttpGet]
         public IActionResult CreateQ()
@@ -36,6 +33,7 @@ namespace test.Controllers
         }
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateQ(CreateQViewModel model)
         {
             if (ModelState.IsValid)
@@ -51,19 +49,20 @@ namespace test.Controllers
                 };
                 await _db.Queues.AddAsync(Queue);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("QView", "Queue", Queue.Id  );
             }
             return View(model);
         }
-        //public IActionResult AjaxShowQueueInfo(int Id)
-        //{
-        //    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-        //    {
-        //        QueueDbModel Queue = _db.Queues.Find(Id);
-        //        return PartialView(Queue);
-        //    }
-        //    return RedirectToAction("Index", "Home");
-        //}
+        public IActionResult AjaxShowQueueInfo(int Id)
+        {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                QueueDbModel Queue = _db.Queues.Include("UsersQueues.User").FirstOrDefaultAsync(Q => Q.Id == Id).Result;
+                Queue.UsersQueues = Queue.UsersQueues.OrderBy(u => u.Position).ToList<UserQueueDbModel>();
+                return PartialView(Queue);
+            }
+            return RedirectToAction("Index", "Home");
+        }
         //public bool AjaxAddToQueue(int Id, int Priority)
         //{
         //    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")

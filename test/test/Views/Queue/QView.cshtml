@@ -27,7 +27,7 @@
 <script>
     "use strict";
 
-    const connection = new signalR.HubConnectionBuilder().withUrl("/QueueTest").build();
+    const connection = new signalR.HubConnectionBuilder().withUrl("/QueueView").build();
 
     connection.on("GetNotify", function () {
         ViewQueue();
