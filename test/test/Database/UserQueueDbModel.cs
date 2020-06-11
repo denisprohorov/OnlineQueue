@@ -1,12 +1,15 @@
-﻿namespace test.Database
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace test.Database
 {
     public class UserQueueDbModel
     {
-        public int Id { get; set; }
+        [Required]
         public string UserId { get; set; }
         public int Priority { get; set; }
         public int Position { get; set; }
-        public int? QueueDbModelId { get; set; }
+        [Required]
+        public int QueueDbModelId { get; set; }
 
         public virtual QueueDbModel QueueDbModel { get; set; }
         public virtual UserDbModel User { get; set; }

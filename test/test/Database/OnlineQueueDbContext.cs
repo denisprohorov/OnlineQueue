@@ -36,9 +36,11 @@ namespace test.Database
 
             modelBuilder.Entity<UserQueueDbModel>(entity =>
             {
-                entity.HasIndex(e => e.QueueDbModelId);
+                entity.HasKey(e => new { e.UserId, e.QueueDbModelId});
 
-                entity.HasIndex(e => e.UserId);
+                //entity.HasIndex(e => e.QueueDbModelId);
+
+                //entity.HasIndex(e => e.UserId);
 
                 entity.HasOne(d => d.QueueDbModel)
                     .WithMany(p => p.UsersQueues)
