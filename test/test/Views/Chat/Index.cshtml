@@ -1,83 +1,76 @@
-﻿
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Public Chat";
     ViewData["CurrentTab"] = 3;
 }
 
 
-@if (User.Identity.IsAuthenticated)
-{
-    <div class="chat-main-block">
+
+<div class="chat-main-block">
         
-        <div id="chatroom">
-            <div class="message"><b>Wellcome to the chat, @User.Identity.Name!</b></div>
-        </div>
+    <div id="chatroom">
+        <div class="message"><b>Wellcome to the chat, @User.Identity.Name!</b></div>
+    </div>
 
-        <form id="inputForm" autocomplete="off" onsubmit="SendMessage(); return false;" onkeydown="return KeyDown(event)">
-            <textarea id="message"></textarea>
-            <input type="submit" value="send" />
-        </form>
+    <form id="inputForm" autocomplete="off" onsubmit="SendMessage(); return false;" onkeydown="return KeyDown(event)">
+        <textarea id="message"></textarea>
+        <input type="submit" value="send" />
+    </form>
 
-        <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
-        <script>
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    <script>
 
-        const hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl("/ChatTest")
-            .build();
+    const hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl("/ChatTest")
+        .build();
 
-        let userName = '@User.Identity.Name';
+    let userName = '@User.Identity.Name';
 
-        hubConnection.on('Send', function (message, userName) {
+    hubConnection.on('Send', function (message, userName) {
 
-            let time = new Date();
-            let timeElem = document.createElement("span");
-            timeElem.innerHTML = time.getHours() + ':' + (time.getMinutes() < 10 ? '0' : '') + time.getMinutes();
-            timeElem.className = "message-time";
+        let time = new Date();
+        let timeElem = document.createElement("span");
+        timeElem.innerHTML = time.getHours() + ':' + (time.getMinutes() < 10 ? '0' : '') + time.getMinutes();
+        timeElem.className = "message-time";
 
-            let userNameElem = document.createElement("b");
-            userNameElem.appendChild(document.createTextNode(userName + ': '));
+        let userNameElem = document.createElement("b");
+        userNameElem.appendChild(document.createTextNode(userName + ': '));
 
-            let elem = document.createElement("p");
-            elem.appendChild(userNameElem);
-            elem.appendChild(timeElem);
-            elem.innerHTML += "<br>";
+        let elem = document.createElement("p");
+        elem.appendChild(userNameElem);
+        elem.appendChild(timeElem);
+        elem.innerHTML += "<br>";
 
-            let pre = document.createElement("pre");
-            pre.appendChild(document.createTextNode(message.trim()));
-            elem.appendChild(pre);
+        let pre = document.createElement("pre");
+        pre.appendChild(document.createTextNode(message.trim()));
+        elem.appendChild(pre);
 
-            let msgElem = document.createElement("div");
-            msgElem.appendChild(elem);
-            msgElem.className = "message";
+        let msgElem = document.createElement("div");
+        msgElem.appendChild(elem);
+        msgElem.className = "message";
 
-            let chatElem = document.getElementById("chatroom");
-            chatElem.appendChild(msgElem);
-            chatElem.scrollTop = chatElem.scrollHeight;
+        let chatElem = document.getElementById("chatroom");
+        chatElem.appendChild(msgElem);
+        chatElem.scrollTop = chatElem.scrollHeight;
 
             
-        });
+    });
 
-        function SendMessage() {
-            let message = document.getElementById("message").value;
-            if (/\S/.test(message)) {
-                hubConnection.invoke("Send", message, userName);
-            }
-            document.getElementById("message").value = "";
+    function SendMessage() {
+        let message = document.getElementById("message").value;
+        if (/\S/.test(message)) {
+            hubConnection.invoke("Send", message, userName);
         }
+        document.getElementById("message").value = "";
+    }
 
-        function KeyDown(event) {
-            if (event.key == "Enter" && !event.shiftKey) {
-                event.preventDefault();
-                document.getElementById("inputForm").onsubmit();
-            }
+    function KeyDown(event) {
+        if (event.key == "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            document.getElementById("inputForm").onsubmit();
         }
+    }
 
-        hubConnection.start();
-        </script>
-    </div>
-}
-else
-{
-    <h6>Войдите в систему для использования чата.</h6>
-}
+    hubConnection.start();
+    </script>
+</div>

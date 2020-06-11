@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using test.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace test.Controllers
 {
@@ -26,35 +28,33 @@ namespace test.Controllers
         //    }
         //    return View(Queue);
         //}
-        //[HttpGet]
-        //public IActionResult CreateQ()
-        //{
-        //    return View();
-        //}
-        //[HttpPost]
-        //public async Task<IActionResult> CreateQ(CreateQViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        QueueDbModel Queue = new QueueDbModel
-        //        {
-        //            Name = model.Name,
-        //            Priority = model.Priority,
-        //            About = model.About,
-        //            Id = model.Id,
-        //            TeacherName = model.TeacherName,
-        //            OuthorName = User.Identity.Name,
-        //            UsersName = new List<string>(),
-        //            UsersPriority = new List<int>(),
-        //        };
-        //        await _db.Queues.AddAsync(Queue);
-        //        _userManager.FindByNameAsync(User.Identity.Name).Result.QueuesAsOuthor.Add(Queue.Id);
-        //        _userManager.FindByNameAsync(model.TeacherName).Result.QueuesAsTeacher.Add(Queue.Id);
-        //        await _db.SaveChangesAsync();
-        //        return RedirectToAction("QView", "Queue", new { Queue.Id });
-        //    }
-        //    return View(model);
-        //}
+        [Authorize]
+        [HttpGet]
+        public IActionResult CreateQ()
+        {
+            return View();
+        }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> CreateQ(CreateQViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                QueueDbModel Queue = new QueueDbModel ()
+                {
+                    Title = model.Title,
+                    Priority = model.Priority,
+                    About = model.About,
+                    //Teacher = model.Teacher,
+                    Teacher = _userManager.GetUserAsync(User).Result,///////////////////////////////////////////////////////////
+                    Author = _userManager.GetUserAsync(User).Result,
+                };
+                await _db.Queues.AddAsync(Queue);
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Index", "Home");
+            }
+            return View(model);
+        }
         //public IActionResult AjaxShowQueueInfo(int Id)
         //{
         //    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")

@@ -11,12 +11,12 @@ namespace CustomIdentityApp.Controllers
     {
         private readonly UserManager<UserDbModel> _userManager;
         private readonly SignInManager<UserDbModel> _signInManager;
-        private readonly OnlineQueueDbContext _db;
-        public AccountController(UserManager<UserDbModel> userManager, SignInManager<UserDbModel> signInManager, OnlineQueueDbContext db)
+        //private readonly RoleManager<IdentityRole> _roleManager;
+        public AccountController(/*RoleManager<IdentityRole> roleManager, */UserManager<UserDbModel> userManager, SignInManager<UserDbModel> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _db = db;
+            //_roleManager = roleManager;
         }
         [HttpGet]
         public IActionResult Register()
@@ -37,6 +37,7 @@ namespace CustomIdentityApp.Controllers
                 if (result.Succeeded)
                 {
                     // установка куки
+                    //await _userManager.AddToRoleAsync(user, "admin");
                     await _signInManager.SignInAsync(user, false);
                     return RedirectToAction("Index", "Home");
                 }
@@ -85,11 +86,11 @@ namespace CustomIdentityApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult UserPage(string Name)
-        {
-            ViewBag.Db = _db;
-            UserDbModel user = _userManager.FindByNameAsync(Name).Result;
-            return View(user);
-        }
+        //public IActionResult UserPage(string Name)
+        //{
+        //    ViewBag.Db = _db;
+        //    UserDbModel user = _userManager.FindByNameAsync(Name).Result;
+        //    return View(user);
+        //}
     }
 }

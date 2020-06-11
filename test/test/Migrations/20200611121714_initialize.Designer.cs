@@ -10,15 +10,15 @@ using test.Database;
 namespace test.Migrations
 {
     [DbContext(typeof(OnlineQueueDbContext))]
-    [Migration("20200610124944_Initialize")]
-    partial class Initialize
+    [Migration("20200611121714_initialize")]
+    partial class initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.4")
+                .HasAnnotation("ProductVersion", "3.1.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -245,10 +245,11 @@ namespace test.Migrations
 
             modelBuilder.Entity("test.Database.UserQueueDbModel", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("QueueDbModelId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Position")
                         .HasColumnType("integer");
@@ -256,17 +257,9 @@ namespace test.Migrations
                     b.Property<int>("Priority")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("QueueDbModelId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "QueueDbModelId");
 
                     b.HasIndex("QueueDbModelId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("UserQueue");
                 });
@@ -337,11 +330,15 @@ namespace test.Migrations
                 {
                     b.HasOne("test.Database.QueueDbModel", "QueueDbModel")
                         .WithMany("UsersQueues")
-                        .HasForeignKey("QueueDbModelId");
+                        .HasForeignKey("QueueDbModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("test.Database.UserDbModel", "User")
                         .WithMany("UsersQueues")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

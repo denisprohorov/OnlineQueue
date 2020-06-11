@@ -10,8 +10,8 @@ using test.Database;
 namespace test.Migrations
 {
     [DbContext(typeof(OnlineQueueDbContext))]
-    [Migration("20200611083528_2")]
-    partial class _2
+    [Migration("20200611125611_Add Priority in QueueDbModel")]
+    partial class AddPriorityinQueueDbModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -162,6 +162,9 @@ namespace test.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("AuthorId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Priority")
                         .HasColumnType("text");
 
                     b.Property<string>("TeacherId")

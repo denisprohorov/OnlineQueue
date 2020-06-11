@@ -162,6 +162,9 @@ namespace test.Migrations
                     b.Property<string>("AuthorId")
                         .HasColumnType("text");
 
+                    b.Property<string>("Priority")
+                        .HasColumnType("text");
+
                     b.Property<string>("TeacherId")
                         .HasColumnType("text");
 

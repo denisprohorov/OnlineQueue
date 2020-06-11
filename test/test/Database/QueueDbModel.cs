@@ -12,6 +12,7 @@ namespace test.Database
         public int Id { get; set; }
         public string Title { get; set; }
         public string About { get; set; }
+        public string Priority { get; set; }
         public string TeacherId { get; set; }
         public string AuthorId { get; set; }
 

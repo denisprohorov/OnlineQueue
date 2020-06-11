@@ -2,7 +2,7 @@
 
 namespace test.Migrations
 {
-    public partial class Initialize : Migration
+    public partial class initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

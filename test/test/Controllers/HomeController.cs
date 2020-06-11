@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using test.Database;
 using test.Models;
@@ -13,6 +15,7 @@ namespace test.Controllers
     {
         
         private readonly OnlineQueueDbContext _db;
+        
         public HomeController(OnlineQueueDbContext db)
         {
             _db = db;
@@ -41,8 +44,10 @@ namespace test.Controllers
 
         //    return searchModel;
         //}
-        public async Task<IActionResult> Index(SearchModel searchModel = null)
-        {
+        public async Task<IActionResult> Index(SearchModel searchModel = null) { 
+
+
+
             return View(/*(searchModel.Type == "User") ? FindUsers(searchModel) : FindQueues(searchModel)*/);
         }
 
