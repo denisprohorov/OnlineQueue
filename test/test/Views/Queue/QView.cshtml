@@ -14,11 +14,7 @@
 
     @if (User.Identity.IsAuthenticated)
     {
-        <div class="form-check-inline">
-            <input placeholder="Proirity" type="number" id="inputPriority" style="width: 100px;"/>
-            <button onclick = "AddToQ()" > Join Q </button>
-            <button onclick = "DeleteFromQueue('@User.Identity.Name')" > Leave Q </button>
-       </div>
+        
     }
 
     <table class="table" id="Queue"></table>
@@ -50,25 +46,25 @@
 
     function AddToQ() {
         $.ajax({
-            url: '/Queue/AjaxAddToQueue?Id=@Model.Id&Priority=' + document.getElementById("inputPriority").value,
+            url: '/Queue/AjaxAddToQueue?QueueId=@Model.Id&Priority=' + document.getElementById("inputPriority").value,
             success: function (returnData) {
                 if (returnData) { connection.invoke("SendGroupNotify", "@Model.Id") } ;
             }
         });
     }
 
-    function DeleteFromQueue(Name) {
+    function DeleteFromQueue(UserId) {
         $.ajax({
-            url: '/Queue/AjaxDeleteFromQueue?Id=@Model.Id&Name=' + Name,
+            url: '/Queue/AjaxDeleteFromQueue?QueueId=@Model.Id&UserId=' + UserId,
             success: function (returnData) {
                 if (returnData) { connection.invoke("SendGroupNotify", "@Model.Id") } ;
             }
         });
     }
 
-    function ChangePriority(Name) {
+    function ChangePriority(UserId) {
         $.ajax({
-            url: '/Queue/AjaxChangePriority?Id=@Model.Id&Name=' + Name + '&Priority=' + prompt ("Enter priority", 0),
+            url: '/Queue/AjaxChangePriority?QueueId=@Model.Id&UserId=' + UserId + '&Priority=' + prompt ("Enter priority", 0),
             success: function (returnData) {
                 if (returnData) { connection.invoke("SendGroupNotify", "@Model.Id") } ;
             }

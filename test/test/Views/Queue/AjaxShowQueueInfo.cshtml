@@ -1,4 +1,12 @@
 ﻿@model  test.Database.QueueDbModel
+@if(ViewBag.UserId != null) 
+{ 
+<div class="form-check-inline">
+    <input placeholder="Proirity" type="number" id="inputPriority" style="width: 100px;" />
+    <button onclick="AddToQ()"> Join Q </button>
+    <button onclick="DeleteFromQueue('@ViewBag.UserId')"> Leave Q </button>
+</div>
+}
 <tbody>
     <tr>
         <th>Priority</th>
@@ -10,11 +18,12 @@
             <td>@UserQueue.Priority</td>
             <td>
                 @UserQueue.User.UserName
-           @if (User.Identity.Name == Model.Author.UserName || User.Identity.Name == Model.Teacher.UserName || User.IsInRole(RoleTypes.Admin))
-            {
-                <button onclick="DeleteFromQueue('@UserQueue.User.UserName')">remove</button>
-                <button onclick="ChangePriority('@UserQueue.User.UserName')">priority</button>
-            }
+                
+                 @if (User.Identity.Name == Model.Author.UserName || User.Identity.Name == Model.Teacher.UserName || User.IsInRole(RoleTypes.Admin))
+                 {
+                    <button onclick="DeleteFromQueue('@UserQueue.UserId')">remove</button>
+                    <button onclick="ChangePriority('@UserQueue.UserId')">priority</button>
+                 }
         </td>
     </tr>
     }

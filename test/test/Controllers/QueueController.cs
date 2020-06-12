@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using test.Models;
 
 namespace test.Controllers
 {
@@ -22,7 +23,7 @@ namespace test.Controllers
         }
         public IActionResult QView(int Id)
         {
-            QueueDbModel Queue = _db.Queues.Include("Author").FirstOrDefaultAsync(Q => Q.Id == Id).Result;
+            QueueDbModel Queue = _db.Queues.Include("Author").Include("Teacher").FirstOrDefaultAsync(Q => Q.Id == Id).Result;
             return View(Queue);
         }
         [Authorize]
@@ -49,7 +50,7 @@ namespace test.Controllers
                 };
                 await _db.Queues.AddAsync(Queue);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("QView", "Queue", Queue.Id  );
+                return RedirectToAction("QView", "Queue", new { Queue.Id});
             }
             return View(model);
         }
@@ -57,84 +58,82 @@ namespace test.Controllers
         {
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
-                QueueDbModel Queue = _db.Queues.Include("UsersQueues.User").FirstOrDefaultAsync(Q => Q.Id == Id).Result;
+                ViewBag.UserId = _userManager.GetUserId(User);
+                QueueDbModel Queue = _db.Queues.Include("Author").Include("Teacher")
+                                    .Include("UsersQueues.User").FirstOrDefaultAsync(Q => Q.Id == Id).Result;
                 Queue.UsersQueues = Queue.UsersQueues.OrderBy(u => u.Position).ToList<UserQueueDbModel>();
                 return PartialView(Queue);
             }
             return RedirectToAction("Index", "Home");
         }
-        //public bool AjaxAddToQueue(int Id, int Priority)
-        //{
-        //    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-        //    {
-        //        return AddToQueue(Id, Priority, User.Identity.Name);
-        //    }
-        //    return false;
-        //}
-        //public bool AjaxDeleteFromQueue(int Id, string Name)
-        //{
-        //    QueueDbModel Queue = _db.Queues.Find(Id);
-        //    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest" && Queue.UsersName.Contains(Name))
-        //    {
-        //        _userManager.FindByNameAsync(User.Identity.Name).Result.QueuesAsMember.Remove(Queue.Id);
-        //        Queue.UsersPriority.RemoveAt(Queue.UsersName.FindIndex(U => U == Name));
-        //        Queue.UsersName.Remove(Name);
-        //        _db.SaveChanges();
-        //        return true;
-        //    }
-        //    return false;
-        //}
-        //public bool AjaxChangePriority(int Id, string Name, int Priority)
-        //{
-        //    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-        //    {
-        //        QueueDbModel Queue = _db.Queues.Find(Id);
-        //        int index = Queue.UsersName.FindIndex(U => U == Name);
-        //        if (Queue.UsersPriority[index] == Priority) { return false; }
-        //        AjaxDeleteFromQueue(Id, Name);
-        //        AddToQueue(Id, Priority, Name);
-        //        _db.SaveChanges();
-        //        return true;
-        //    }
-        //    return false;
-        //}
+        public bool AjaxAddToQueue(int QueueId, int Priority)
+        {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return AddToQueue(QueueId, Priority);
+            }
+            return false;
+        }
+        private bool AddToQueue(int QueueId, int Priority)
+        {
+            QueueDbModel Queue = _db.Queues.Include("UsersQueues").SingleOrDefault(Q => Q.Id == QueueId);
+            Queue.UsersQueues.Add(new UserQueueDbModel()
+            {
+                User = _userManager.GetUserAsync(User).Result,
+                Position = Queue.UsersQueues.Count(),
+                Priority = Priority
+            });
+            /////////////////////////////////////////////////////////
+            Queue.UsersQueues = Queue.UsersQueues.OrderBy(UQ => UQ.Position).ToList();
+            if(Queue.Priority == PriorityTypes.Less)
+                Queue.UsersQueues = Queue.UsersQueues.OrderBy(UQ => UQ.Priority).ToList();
+            else if(Queue.Priority == PriorityTypes.Greater)
+                Queue.UsersQueues = Queue.UsersQueues.OrderByDescending(UQ => UQ.Priority).ToList();
 
-        //private bool AddToQueue(int Id, int Priority, string Name)
-        //{
-        //    Compare compare;
-        //    QueueDbModel Queue = _db.Queues.Find(Id);
-        //    compare = InitializateCompare(Queue.Priority);
+            int i = 0;
+            foreach (var UserQueue in Queue.UsersQueues)
+            {
+                UserQueue.Position = i++;
+            }
+            _db.SaveChanges();
+            return true;
+        }
 
-        //    if (User.Identity.IsAuthenticated && !Queue.UsersName.Contains(Name))
-        //    {
-        //        int i = Queue.UsersPriority.Count - 1;
-        //        Queue.UsersName.Add(Name);
-        //        Queue.UsersPriority.Add(Priority);
-        //        while (i >= 0 && !compare(Queue.UsersPriority[i], Priority))
-        //        {
-        //            Queue.UsersName[i + 1] = Queue.UsersName[i];
-        //            Queue.UsersPriority[i + 1] = Queue.UsersPriority[i];
-        //            --i;
-        //        }
-        //        Queue.UsersName[i + 1] = Name;
-        //        Queue.UsersPriority[i + 1] = Priority;
-        //        _userManager.FindByNameAsync(Name).Result.QueuesAsMember.Add(Id);
-        //        _db.SaveChanges();
-        //        return true;
-        //    }
+        public bool AjaxDeleteFromQueue(int QueueId, string UserId)
+        {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                _db.UserQueue.Remove(new UserQueueDbModel()
+                {
+                    QueueDbModelId = QueueId,
+                    UserId = UserId,
+                });
+                _db.SaveChanges();
+            }
+            return true;
+        }
+        public bool AjaxChangePriority(int QueueId, string UserId, int Priority)
+        {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                QueueDbModel Queue = _db.Queues.Include("UsersQueues").SingleOrDefault(Q => Q.Id == QueueId);
+                Queue.UsersQueues.ToList().Find(UQ => UQ.UserId == UserId).Priority = Priority;
+                Queue.UsersQueues = Queue.UsersQueues.OrderBy(UQ => UQ.Position).ToList();
+                ////////////////////////////////////////////////
+                if (Queue.Priority == PriorityTypes.Less)
+                    Queue.UsersQueues = Queue.UsersQueues.OrderBy(UQ => UQ.Priority).ToList();
+                else if (Queue.Priority == PriorityTypes.Greater)
+                    Queue.UsersQueues = Queue.UsersQueues.OrderByDescending(UQ => UQ.Priority).ToList();
+                int i = 0;
+                foreach (var UserQueue in Queue.UsersQueues)
+                {
+                    UserQueue.Position = i++;
+                }
 
-        //    return false;
-        //}
-        //private bool IsLess(int a, int b) { return (a <= b); }
-        //private bool IsGreater(int a, int b) { return (a >= b); }
-        //private bool IsNone(int a, int b) { return true; }
-
-        //private delegate bool Compare(int a, int b);
-        //private Compare InitializateCompare(string type)
-        //{
-        //    if (type == "less") { return IsLess; }
-        //    else if (type == "greater") { return IsGreater; }
-        //    return IsNone;
-        //}
+                _db.SaveChanges();
+                return true;
+            }
+            return false;
+        }
     }
 }
